@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxx0m7rolggyr"]
+
+[ext_resource type="Script" uid="uid://oc5ocsxiq2rm" path="res://scripts/apple_tree.gd" id="1_66v30"]
+[ext_resource type="Texture2D" uid="uid://b1qd2yd4yauss" path="res://assets/PUNY_WORLD_v1/survivalgame-appletree.png" id="1_rf3rb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k6e6y"]
+atlas = ExtResource("1_rf3rb")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idwsj"]
+atlas = ExtResource("1_rf3rb")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b72hq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k6e6y")
+}],
+"loop": false,
+"name": &"apples",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idwsj")
+}],
+"loop": false,
+"name": &"no_apples",
+"speed": 0.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rf3rb"]
+radius = 33.0
+
+[node name="apple_tree" type="Node2D"]
+script = ExtResource("1_66v30")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_b72hq")
+animation = &"no_apples"
+
+[node name="pickable_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="pickable_area"]
+shape = SubResource("CircleShape2D_rf3rb")
+
+[node name="growth_timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="Marker2D" type="Marker2D" parent="."]
+
+[connection signal="body_entered" from="pickable_area" to="." method="_on_pickable_area_body_entered"]
+[connection signal="body_exited" from="pickable_area" to="." method="_on_pickable_area_body_exited"]
+[connection signal="timeout" from="growth_timer" to="." method="_on_growth_timer_timeout"]
